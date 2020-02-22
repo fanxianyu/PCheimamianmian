@@ -57,11 +57,18 @@
       </el-form>
     </div>
     <img src="./img/1.png" alt />
+    <reg></reg>
   </div>
 </template>
 
 <script>
+// 导入组件
+import reg from './components/register.vue'
 export default {
+  // 注册组件
+  components:{
+    reg
+  },
   data() {
     return {
         // 跟表单双向绑定的对象
