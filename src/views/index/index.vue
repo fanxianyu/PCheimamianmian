@@ -30,7 +30,8 @@ body {
     height: 60px;
     .left-head {
       height: 60px;
-      line-height: 60px;
+      display: flex;
+      align-items: center;
       .el-icon-s-fold {
         width: 24px;
         height: 20px;
@@ -38,8 +39,12 @@ body {
       .logo {
         width: 33px;
         height: 28px;
+        margin-left:22px;
+        margin-right:11px;
       }
       .leftword {
+        width: 92px;
+        height: 22px;
         font-size: 22px;
         font-family: Microsoft YaHei;
         font-weight: bold;

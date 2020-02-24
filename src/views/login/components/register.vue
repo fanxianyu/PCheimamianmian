@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { sendSms,reGister } from "@/api/axios.js";
+import { sendSms,reGister } from "@/api/register.js";
 export default {
   data() {
     return {
@@ -189,6 +189,7 @@ export default {
         code: this.form.imgCode,
         phone: this.form.phone
       }).then(res => {
+        window.console.log(res)
         // 获取响应体
         if (res.data.code == 200) {
           this.$message.success("验证码为" + res.data.data.captcha);

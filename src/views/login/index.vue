@@ -34,7 +34,7 @@
               <el-input v-model="ruleForm.code" placeholder="请输入验证码" prefix-icon="el-icon-key"></el-input>
           </el-col>
           <el-col :span="6">
-            <img class="code" src="./img/3.png" alt />
+            <img class="code" :src="indexUrl" @click="getIndexUrl" alt />
           </el-col>
         </el-row>
          </el-form-item>
@@ -51,7 +51,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" class="bnt-box" @click="submitForm('ruleForm')">登录</el-button>
+          <el-button type="primary" class="bnt-box" @click="submitForm">登录</el-button>
           <el-button type="primary" class="bnt-box" @click="findReg">注册</el-button>
         </el-form-item>
       </el-form>
@@ -64,6 +64,8 @@
 <script>
 // 导入组件
 import reg from './components/register.vue'
+import { login } from '@/api/login.js'
+import { setToken } from  '@/utilis/token.js'
 export default {
   // 注册组件
   components:{
@@ -71,6 +73,7 @@ export default {
   },
   data() {
     return {
+      indexUrl:process.env.VUE_APP_URL+'/captcha?type=login',
         // 跟表单双向绑定的对象
       ruleForm: {
         phone: "",
@@ -82,7 +85,9 @@ export default {
       rules: {
         //   真正的规则
         phone: [
-          { required: true, message: "手机号不能为空", trigger: "blur" }
+          { required: true, message: "手机号不能为空", trigger: "blur" },
+          { pattern:/0?(13|14|15|18|17)[0-9]{9}/, message:'请输入正确的手机号', trigger:'blur'},
+            { len:11, message:'手机号码长度为11位数',triggle:'blur'}
         ],
         password: [
             { required: true, message: '密码不能为空', trigger: 'blur' },
@@ -101,19 +106,45 @@ export default {
     };
   },
    methods: {
+    //  获取登录验证码
+     getIndexUrl(){
+       this.indexUrl=process.env.VUE_APP_URL+'/captcha?type=login'+ Date.now()
+     },
+      // 注册点击事件
      findReg(){
        this.$refs.reg.dialogFormVisible=true
      },
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
+      // 登录点击事件
+     submitForm(){
+      //  再发送登录请求之前，我们先自己判断手机号码是否正确
+      if(!(/0?(13|14|15|18|17)[0-9]{9}/.test(this.ruleForm.phone))){
+       return this.$message.error('请输入正确的手机号')
+      }
+        // 先效验表单信息
+        // 先获取表单元素
+        this.$refs.ruleForm.validate(v=>{
+          // 如果效验成功就发送登录请求
+          if(v){
+            login({
+              phone:this.ruleForm.phone,
+              password:this.ruleForm.password,
+              code:this.ruleForm.code
+            }).then(res=>{
+              window.console.log(res)
+              if(res.data.code==200){
+                // 将token保存到本地
+                // window.localStorage.setItem('token',res.data.data.token)
+                  setToken(res.data.data.token)
+                this.$message.success('登陆成功')
+                // 然后利用路由进行跳转
+                this.$router.push('/index')
+              }else{
+                this.$message.error(res.data.message)
+              }
+            })
           }
-        });
-      },
+        })
+      }
     },
 };
 </script>
