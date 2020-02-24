@@ -28,16 +28,16 @@
           ></el-input>
         </el-form-item>
         <!-- 这里要用到栅格布局 -->
+         <el-form-item prop="code">
         <el-row>
           <el-col :span="18">
-            <el-form-item prop="code">
               <el-input v-model="ruleForm.code" placeholder="请输入验证码" prefix-icon="el-icon-key"></el-input>
-            </el-form-item>
           </el-col>
           <el-col :span="6">
             <img class="code" src="./img/3.png" alt />
           </el-col>
         </el-row>
+         </el-form-item>
 
         <el-form-item prop="agree">
          <div class="check-box" >
@@ -52,12 +52,12 @@
 
         <el-form-item>
           <el-button type="primary" class="bnt-box" @click="submitForm('ruleForm')">登录</el-button>
-          <el-button type="primary" class="bnt-box">注册</el-button>
+          <el-button type="primary" class="bnt-box" @click="findReg">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
     <img src="./img/1.png" alt />
-    <reg></reg>
+    <reg ref="reg"></reg>
   </div>
 </template>
 
@@ -101,6 +101,9 @@ export default {
     };
   },
    methods: {
+     findReg(){
+       this.$refs.reg.dialogFormVisible=true
+     },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -111,7 +114,7 @@ export default {
           }
         });
       },
-    }
+    },
 };
 </script>
 
