@@ -2,6 +2,7 @@
 import axios from 'axios'
 
 // 封装请求的方法，并将它暴露出去
+// 点击登录按钮发送登录请求
 export function login(data){
     return axios({
         url:process.env.VUE_APP_URL + '/login',

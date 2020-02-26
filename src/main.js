@@ -6,6 +6,7 @@ import router from './router/index.js'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
+
 // 导入全局样式 只要写路径
 import './style/base.css'
 

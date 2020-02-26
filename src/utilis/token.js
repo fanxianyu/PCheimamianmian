@@ -1,7 +1,7 @@
 // 这里面进行token的封装，如果以后哪里要操作token，那么直接调用这里面的函数就可以了
 
 // 自定义一个常量
-const TOKENKEY = 'mmtoken'
+const TOKENKEY = 'token'
 
 // 1首先要暴露出去，然后再return
 // 1获取token
@@ -15,6 +15,6 @@ export function setToken(token){
 }
 
 // 3删除token
-export function removeItem(){
+export function removeToken(){
      window.localStorage.removeItem(TOKENKEY)
 }
