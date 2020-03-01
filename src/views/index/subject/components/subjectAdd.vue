@@ -86,10 +86,5 @@ export default {
 </script>
 
 <style>
-.el-dialog__header {
-  text-align: center;
-}
-.el-dialog.el-dialog__title {
-  color: white;
-}
+
 </style>

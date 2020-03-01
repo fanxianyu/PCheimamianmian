@@ -33,8 +33,10 @@
           >新增学科</el-button>
         </el-form-item>
       </el-form>
+      </el-card>
 
       <!-- 底部表格 -->
+      <el-card class="box-card">
       <el-table :data="tableData" style="width: 100%">
         <el-table-column type="index" label="序号"></el-table-column>
         <el-table-column prop="rid" label="学科编号"></el-table-column>
@@ -161,8 +163,9 @@ export default {
     } ,   // 搜索点击事件
     doSearch() {
       // 调用接口函数
+      // 首先把page改为1
+      this.page=1
       this.getsubjectList();
-      window.console.log('123456')
     },
     // 清除点击事件
     clearSearch() {
