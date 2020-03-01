@@ -117,9 +117,9 @@ export default {
       // 登录点击事件
      submitForm(){
       //  再发送登录请求之前，我们先自己判断手机号码是否正确
-      if(!(/0?(13|14|15|18|17)[0-9]{9}/.test(this.ruleForm.phone))){
-       return this.$message.error('请输入正确的手机号')
-      }
+      // if(!(/0?(13|14|15|18|17)[0-9]{9}/.test(this.ruleForm.phone))){
+      //  return this.$message.error('请输入正确的手机号')
+      // }
         // 先效验表单信息
         // 先获取表单元素
         this.$refs.ruleForm.validate(v=>{

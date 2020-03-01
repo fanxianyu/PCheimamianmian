@@ -9,8 +9,8 @@
       </div>
       <!-- 右边部分 -->
       <div class="right-head">
-        <img :src='avatar' alt="">
-        <span class="name">{{userName}},你好</span>
+        <img :src='this.$store.state.userPic' alt="">
+        <span class="name">{{this.$store.state.userName}},你好</span>
         <el-button size="small" type="primary" @click="dologinOut">退出</el-button>
       </div>
     </el-header>
@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import { info, logout } from '@/api/index.js'
-import { removeToken } from '@/utilis/token.js'
+import { logout } from '@/api/index.js'
+import { removeToken,getToken } from '@/utilis/token.js'
 export default {
   data(){
     return{
@@ -91,14 +91,31 @@ export default {
         });
   }
   },
+  beforeCreate() {
+    // 在这里面判断获取的token是否为空  调用token工具
+    if(getToken()==null){
+      // 那么就要输入请登录信息，并且跳转回login页面
+      this.$message.error('请先登录')
+      this.$router.push('/login')
+    }
+  },
   created() {
     
-    // 一进页面就调用请求用户信息函数方法
-    info().then(res=>{
-      // window.console.log(res)
-      this.userName=res.data.data.username
-      this.avatar=process.env.VUE_APP_URL+'/'+res.data.data.avatar
-    })
+    // 一进来页面就发送获取用户信息的请求
+    // info().then(res=>{
+    //   // window.console.log(res)
+    //  if(res.data.code==200){
+    //   this.userName=res.data.data.username
+    //   this.avatar=process.env.VUE_APP_URL+'/'+res.data.data.avatar
+
+    //  }else if(res.data.code==206){
+    //    this.$message.error('登录状态异常，请重新登录')
+    //   //  删除本地token
+    //   removeToken()
+    //   // 跳转回登录页
+    //   this.$router.push('/login')
+    //  }
+    // })
   },
 }
 </script>
