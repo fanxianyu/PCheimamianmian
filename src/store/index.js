@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     state:{
         userName:'',
         userPic:'',
+        userStatus:'',
     },
     mutations:{
         changename(state,val){
@@ -21,6 +22,9 @@ const store = new Vuex.Store({
         },
         changePic(state,val){
             state.userPic=val
+        },
+        changestatus(state,val){
+            state.userStatus=val
         }
     }
 })

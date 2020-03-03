@@ -135,8 +135,9 @@ export default {
                 // 将token保存到本地
                 // window.localStorage.setItem('token',res.data.data.token)
                   setToken(res.data.data.token)
-                this.$message.success('登陆成功')
+                // this.$message.success('登陆成功')
                 // 然后利用路由进行跳转
+                // 注意点，在这里执行了这个跳转的代码后会到全局前置钩子那里进行处理
                 this.$router.push('/index')
               }else{
                 this.$message.error(res.data.message)

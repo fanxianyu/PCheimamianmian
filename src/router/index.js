@@ -22,11 +22,7 @@ Vue.use(VueRouter)
 // 4准备组件
 import login from '../views/login/index.vue'
 import index from '../views/index/index.vue'
-import user from '../views/index/user/index.vue'
-import chart from '../views/index/chart/chart.vue'
-import question from '../views/index/question/question.vue'
-import business from '../views/index/business/business.vue'
-import subject from '../views/index/subject/subject.vue'
+
 
 import { info } from '@/api/index.js'
 import { removeToken } from '@/utilis/token.js'
@@ -34,22 +30,17 @@ import { Message } from 'element-ui'
 
 
 
-
+// 导入被抽取的子路由文件
+import children from '@/router/routerChildren.js'
 
 
 // 5设置路由规则
 const routes=[
-    {path:'/login',component:login,meta:{title:'登录'}},
+    {path:'/login',component:login,meta:{title:'登录',roles:['超级管理员','管理员','老师','学生']}},
     // 路由重定向
     {path:'/',redirect:'/login'},
-    {path:'/index',component:index,meta:{title:'首页'},children:[
-        //这里是子路由
-        {path:'chart',component:chart,meta:{title:'数据概览'}},
-        {path:'user',component:user,meta:{title:'用户列表'}},
-        {path:'question',component:question,meta:{title:'题库列表'}},
-        {path:'business',component:business,meta:{title:'企业列表'}},
-        {path:'subject',component:subject,meta:{title:'学科列表'}}
-    ]}
+    {path:'/index',component:index,meta:{title:'首页',roles:['超级管理员','管理员','老师','学生']},
+    children}
 ]
 
 // 6创建路由对象
@@ -72,11 +63,28 @@ router.beforeEach((to,from,next) => {
         // 先axios发送请求
         info().then(res=>{
             if(res.data.code==200){
-                // 把数据放入vuex
+
+                // 在这里判断用户信息的状态
+                if(res.data.data.status==1){
+                    // 把登录时发送请求得到的数据放入vuex
                 store.commit('changename',res.data.data.username)
                 store.commit('changePic',process.env.VUE_APP_URL+'/'+res.data.data.avatar)
-                // 放行
+                // 把获取用户信息中的role存储到vuex里面去，
+                store.commit('changestatus',res.data.data.role)
+                    if(from.path=='/login'){
+                        Message.success('登陆成功')
+                    }
+                    // 这里判断用户状态
+                if(to.meta.roles.includes(res.data.data.role)){
+                     // 放行
                 next()
+                }else{
+                    Message.warning('账号无权访问')
+                    next(from.path)
+                }
+                }else{
+                    Message.warning('账户登录异常，请于管理员联系')
+                }
             }else if(res.data.code==206){
                 // 提示错误消息
                 Message.error('登录状态异常，请重新登录')

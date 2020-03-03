@@ -18,30 +18,14 @@
       <!-- 左侧部分 -->
        <el-aside class="my-aside" width="auto">
         <el-menu router :collapse="isCollapse" default-active="1" class="el-menu-vertical-demo">
-          <el-menu-item index="/index/chart">
+
+          <template v-for="(item,index) in routerChildren">
+              <el-menu-item  :key="index" :index='"/index/"+item.path'  v-if="item.meta.roles.includes($store.state.userStatus)">
             <i class="el-icon-pie-chart"></i>
-            <span slot="title">数据概览</span>
+            <span slot="title" >{{ item.meta.title }}</span>
           </el-menu-item>
+          </template>
 
-          <el-menu-item index="/index/user">
-            <i class="el-icon-user"></i>
-            <span slot="title">用户列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/question">
-            <i class="el-icon-edit-outline"></i>
-            <span slot="title">题库列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/business">
-            <i class="el-icon-office-building"></i>
-            <span slot="title">企业列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/subject">
-            <i class="el-icon-notebook-2"></i>
-            <span slot="title">学科列表</span>
-          </el-menu-item>
         </el-menu>
       </el-aside>
       
@@ -59,9 +43,14 @@
 <script>
 import { logout } from '@/api/index.js'
 import { removeToken,getToken } from '@/utilis/token.js'
+// 导入抽取的子路由文件
+import routerChildren from '@/router/routerChildren.js'
 export default {
+  name:'user',
   data(){
     return{
+      // 把子路由里面的东西存起来
+      routerChildren,
       userName:'',
       avatar:'',
        // 是否折叠菜单
@@ -83,6 +72,10 @@ export default {
               this.$message.success('退出成功')
               // 再删除本地的token
               removeToken()
+              // 再删除vuex里面的内容
+              this.$store.commit('changename','')
+              this.$store.commit('changePic','')
+              this.$store.commit('changestatus','')
               // 在跳转回登录页
               this.$router.push('/login')
           })

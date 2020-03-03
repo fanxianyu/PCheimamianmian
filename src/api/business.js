@@ -67,3 +67,11 @@ export function businessEdit(data){
         data
     })
 }
+
+// 获取token接口
+export function tokenEdit(){
+    return busiruquest({
+        url:'/token',
+        method:'post',
+    })
+}

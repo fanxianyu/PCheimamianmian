@@ -169,6 +169,7 @@ export default {
       this.$refs.Dialog.isADD=true
       // 最后将数据清空
       this.$refs.Dialog.addForm={}
+      this.oldItem=null
     },
     // 点击清除事件
     clearBusiness() {
